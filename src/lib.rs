@@ -23,7 +23,9 @@ pub fn swap_endian_u32(num: u32) -> [u8; 4] {
 }
 
 pub fn parse_satoshis(input: &str) -> Result<u64, String> {
-    input.parse::<u64>().map_err(|_| "Invalid satoshi amount".to_string())
+    input
+        .parse::<u64>()
+        .map_err(|_| "Invalid satoshi amount".to_string())
 }
 
 pub enum ScriptType {
@@ -45,11 +47,7 @@ pub fn classify_script(script: &[u8]) -> ScriptType {
 pub struct Outpoint(pub String, pub u32);
 
 pub fn read_pushdata(script: &[u8]) -> &[u8] {
-    if script.len() > 2 {
-        &script[2..]
-    } else {
-        &[]
-    }
+    if script.len() > 2 { &script[2..] } else { &[] }
 }
 
 pub trait Wallet {
@@ -75,7 +73,7 @@ pub fn apply_fee(balance: &mut u64, fee: u64) {
 }
 
 pub fn move_txid(txid: String) -> String {
-    format!("txid: {}", txid)
+    format!("txid: {txid}")
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -90,7 +88,7 @@ impl Opcode {
         match byte {
             0xac => Ok(Opcode::OpChecksig),
             0x76 => Ok(Opcode::OpDup),
-            _ => Err(format!("Invalid opcode: 0x{:02x}", byte))
+            _ => Err(format!("Invalid opcode: 0x{byte:02x}")),
         }
     }
 }
